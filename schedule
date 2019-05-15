@@ -1,0 +1,66 @@
+#!/bin/bash
+x=()
+config=~/.schedule/schedule.conf
+#nl=`< $config wc -l`
+#m scared ill fail this course
+arg=$1
+if ! [ -f "$config" ]; then
+	touch $config
+fi
+add_todo(){
+	zenity --forms --title="Wassup" --add-entry="Course Title" --add-entry="Course Code" --add-entry="Units" --add-calendar="Date" --forms-date-format='%A %d %Y' 1>>"$config" --width=400 2>/dev/null
+	return
+}
+
+list_todo(){
+	x=()
+	ln=1
+	while read -r todo || [[ -n "$todo" ]]; do
+		x+=($ln)
+		ln=$((ln+1))
+		IFS="|"; for i in $todo; do
+			if [ "$i" == "" ]; then
+				i="-";
+			fi
+			x+=($i)
+		done
+	done < "$config"
+	zenity --list --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=600 --height=600 >/dev/null 2>&1
+}
+remove_todo(){
+	x=()
+	y=0
+	ln=1
+	while read -r todo || [[ -n "$todo" ]]; do		
+		x+=(false)		
+		x+=($ln)
+		ln=$((ln+1))
+		IFS="|"; for i in $todo; do
+			if [ "$i" == "" ]; then
+				i="-";
+			fi			
+			x+=($i)			
+		done
+	done < "$config"
+tr=`zenity --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=600 --height=600 2>/dev/null`
+r_index=0
+	IFS="|"; for i in $tr; do				
+		if [ $i != 1 ] && [ $y != 0 ]; then
+			i=$(($i-1))
+		fi
+		#f=`grep -n "$i" $config`
+		#j=`sed 's/:.*//' <<<$f`
+		sed -i ''$i'd' $config
+		y=$(($y+1))		
+	done	
+	list_todo
+}
+
+if [ "$arg" == "--list" -o "$arg" == "-l" ]; then
+	list_todo
+elif [ "$arg" == "--remove" -o "$arg" == "-r" ]; then
+	remove_todo
+else
+	add_todo
+	
+fi
