@@ -29,7 +29,13 @@ list_todo(){
 	zenity --info --text="Your To-Do List Is Spick Span" --title="Empty" --width=400 2>/dev/null
 	exit 0
 fi
-	yad --list --center --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=600 --height=600 --no-selection --button="Ok:1" --button="Add:0" >/dev/null 2>&1
+	yad --list --center --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=600 --height=600 --no-selection --button="Remove:2" --button="Add:1" --button="Ok:0" >/dev/null 2>&1
+	ch=$?
+		if [ $ch -eq 1 ]; then
+			add_todo
+		elif [ $ch -eq 2 ]; then
+			remove_todo
+		fi
 }
 remove_todo(){
 	x=()
