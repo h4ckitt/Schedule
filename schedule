@@ -25,6 +25,10 @@ list_todo(){
 			x+=($i)
 		done
 	done < "$config"
+		if [ "$ln" == "1" ]; then
+	zenity --info --text="Your To-Do List Is Spick Span" --title="Empty" --width=400 2>/dev/null
+	exit 0
+fi
 	zenity --list --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=600 --height=600 >/dev/null 2>&1
 }
 remove_todo(){
@@ -42,7 +46,11 @@ remove_todo(){
 			x+=($i)			
 		done
 	done < "$config"
-tr=`zenity --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=600 --height=600 2>/dev/null`
+		if [ "$ln" == "1" ]; then
+	zenity --info --text="Your To-Do List Is Spick Span" --title="Empty" --width=400 2>/dev/null
+	exit 0
+fi
+tr=`zenity --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=650 --height=600 2>/dev/null`
 r_index=0
 	IFS="|"; for i in $tr; do				
 		if [ $i != 1 ] && [ $y != 0 ]; then
