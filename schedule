@@ -1,8 +1,8 @@
-#!/bin/bash -x
+#!/bin/bash
 x=()
 icon_trigger=0
-config=~/.schedule/scheduler.conf
-export -f $config
+config=~/.schedule/schedule.conf
+#export -f $config
 #nl=`< $config wc -l`
 #m scared ill fail this course
 arg=$1
@@ -11,7 +11,9 @@ if ! [ -f "$config" ]; then
 fi
 add_todo(){
 	zenity --forms --title="Wassup" --add-entry="Course Title" --add-entry="Course Code" --add-entry="Units" --add-calendar="Date" --forms-date-format='%A %d %Y' 1>>"$config" --width=400 2>/dev/null
+if [ "$icon_trigger" == "0" ]; then
 	list_todo
+fi
 }
 	export -f add_todo
 
@@ -32,9 +34,11 @@ list_todo(){
 	yad --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
 	ch=$?
 	export $ch
+if [ "$icon_trigger" == "0" ]; then
 	if [ "$ch" == "1" ]; then
 		add_todo
 	fi
+fi
 	exit 0
 fi
 	yad --list --center --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=600 --height=600 --no-selection --button="Remove:2" --button="Add:1" --button="Ok:0" >/dev/null 2>&1
@@ -43,8 +47,7 @@ fi
 			add_todo
 		elif [ $ch -eq 2 ]; then
 			remove_todo
-		else
-			echo "TEst"
+		else			
 			if [ "$icon_trigger" == "0" ]; then
 				icon_trigger=$(($icon_trigger+1))
 			yad dialog-alert --center --text="The Schedule App Will Continue In The App Tray" --button="gtk-ok" --width=200 2>/dev/null
@@ -70,7 +73,14 @@ remove_todo(){
 		done
 	done < "$config"
 		if [ "$ln" == "1" ]; then
-	zenity --info --text="Your To-Do List Is Spick Span" --title="Empty" --width=400 2>/dev/null
+	yad --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
+	ch=$?
+	export $ch
+if [ "$icon_trigger" == "0" ]; then
+	if [ "$ch" == "1" ]; then
+		add_todo
+	fi
+fi
 	exit 0
 fi
 tr=`zenity --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=650 --height=600 2>/dev/null`
@@ -84,26 +94,38 @@ r_index=0
 		sed -i ''$i'd' $config
 		y=$(($y+1))		
 	done	
+	if [ "$icon_trigger" == "0" ]; then
 	list_todo
+fi
 }
 export -f remove_todo
 icon_tray(){
 	export fifo=$(mktemp -u --tmpdir schedule.XXXXXXXX)
 	mkfifo "$fifo"
 	trap "rm -f $fifo" exit	
+	explicit_remove(){
+		config=~/.schedule/schedule.conf
+		remove_todo
+	}
+	export -f explicit_remove
+	explicit_add(){
+		config=~/.schedule/schedule.conf
+		add_todo
+	}
+	export -f explicit_add
 	on_click(){
-		config=~/.schedule/scheduler.conf
+		config=~/.schedule/schedule.conf
 		list_todo
 	}
 	export -f on_click
 
 	menu_options(){
 		echo "icon:scheduler"
-		echo "menu:Add Todo!add_todo||List Todo!list_todo||Remove Todo!remove_todo||Quit!quit!gtk-quit"
+		echo "menu:Add Todo!bash -c explicit_add!gtk-add||List Todo!bash -c on_click!gtk-yes||Remove Todo!bash -c explicit_remove!gtk-remove||Quit!quit!gtk-quit"
 		echo "tooltip:Schedule"
 	}
 	exec 3<>$fifo
-	yad --notification --command="bash -c on_click" --listen <&3 & menu_options >&3
+	yad --notification --command="bash -c on_click" --listen <&3 & menu_options >&3 2>/dev/null
 	exec 3>&-
 }
 if [ "$arg" == "--list" -o "$arg" == "-l" -o "$arg" == "" ]; then
