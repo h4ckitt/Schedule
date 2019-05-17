@@ -99,14 +99,13 @@ icon_tray(){
 
 	menu_options(){
 		echo "icon:scheduler"
-		echo "menu:Add Todo!add_todo|List Todo!list_todo|Remove Todo!remove_todo|Quit!quit!gtk-quit"
+		echo "menu:Add Todo!add_todo||List Todo!list_todo||Remove Todo!remove_todo||Quit!quit!gtk-quit"
 		echo "tooltip:Schedule"
 	}
 	exec 3<>$fifo
 	yad --notification --command="bash -c on_click" --listen <&3 & menu_options >&3
 	exec 3>&-
 }
-
 if [ "$arg" == "--list" -o "$arg" == "-l" -o "$arg" == "" ]; then
 	list_todo
 elif [ "$arg" == "--remove" -o "$arg" == "-r" ]; then
