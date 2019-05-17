@@ -50,7 +50,7 @@ fi
 		else			
 			if [ "$icon_trigger" == "0" ]; then
 				icon_trigger=$(($icon_trigger+1))
-			yad dialog-alert --center --text="The Schedule App Will Continue In The App Tray" --button="gtk-ok" --width=200 2>/dev/null
+			yad --image dialog-alert --center --title="Tray Notif" --text="The Schedule App Will Continue In The App Tray" --button="gtk-ok" --width=380 2>/dev/null
 			icon_tray
 		fi
 		fi
