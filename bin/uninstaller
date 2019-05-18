@@ -19,7 +19,6 @@ zenity --question --title="We'll Miss You" --text "Hey Buddy, I Really Don't Wan
 	echo "30" ; sleep 3
 	rm /usr/share/pixmaps/scheduler.png
 	echo "40" ; sleep 3
-	#rm ${HOME}/.icons/scheduler.png
 	echo "50"	; sleep 3
 	rm /usr/share/applications/schedule.desktop	; sleep 3
 	rm -rf /usr/share/Scheduler/
