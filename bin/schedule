@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 x=()
 icon_trigger=0
 config=~/.schedule/schedule.conf
@@ -30,12 +30,9 @@ list_todo(){
 		if [ "$ln" == "1" ]; then
 	yad --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
 	ch=$?
-	export $ch
-if [ "$icon_trigger" == "0" ]; then
 	if [ "$ch" == "1" ]; then
 		add_todo
 	fi
-fi
 	exit 0
 fi
 	yad --list --center --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=600 --height=600 --no-selection --button="Remove:2" --button="Add:1" --button="Ok:0" >/dev/null 2>&1
@@ -72,12 +69,9 @@ remove_todo(){
 		if [ "$ln" == "1" ]; then
 	yad --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
 	ch=$?
-	export $ch
-if [ "$icon_trigger" == "0" ]; then
 	if [ "$ch" == "1" ]; then
 		add_todo
 	fi
-fi
 	exit 0
 fi
 tr=`yad --center --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=700 --no-selection --height=600 2>/dev/null`
@@ -131,5 +125,6 @@ if [ "$arg" == "--list" -o "$arg" == "-l" -o "$arg" == "" ]; then
 elif [ "$arg" == "--remove" -o "$arg" == "-r" ]; then
 	remove_todo
 elif [ "$arg" == "--uninstall" -o "$arg" == "-u" ]; then
-	exec /usr/share/uninstaller && exit 0
+	exec /usr/share/Scheduler/uninstaller 
+	exit 0
 fi
