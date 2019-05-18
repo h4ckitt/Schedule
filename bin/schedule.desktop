@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Scheduler
+GenericName=schedule
+Comment=Stupidly simple.
+Categories=Utility;
+Type=Application
+Exec=schedule
+Icon=scheduler.png
+Terminal=false
+NoDisplay=false

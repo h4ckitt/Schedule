@@ -1,0 +1,32 @@
+#!/bin/bash
+
+[ $(id -u) -eq 0 ] || {
+	zenity --error --title="Error" --text "<span font='12'>Please Run This Uninstaller As SuperUser</span>" --width=300 2>/dev/null
+	exit 0
+}
+
+zenity --question --title="We'll Miss You" --text "Hey Buddy, I Really Don't Wanna Leave Here....Your Hard Disk Is So Comfy, I Even Had A Whole Folder To Myself. Please Don't Send Me Packing. I Promise I'll Pay Rent\n\nAre You Sure You Want To Continue With Uninstall?" --width=800 2>/dev/null
+
+[ $? -eq 0 ] || {
+	zenity --info --title="Thanks" --text="Thanks Very Much Man, I'm So Happy.\nTime To Go Get Comfortable Under Some Memory Addresses" --width=300 2>/dev/null
+	exit 0
+}
+
+(
+	echo "#Please Wait While I Pack My Load And Move Out"; sleep 3
+	echo "20" ; sleep 3
+	rm /usr/bin/schedule	
+	echo "30" ; sleep 3
+	rm /usr/share/pixmaps/scheduler.png
+	echo "40" ; sleep 3
+	#rm ${HOME}/.icons/scheduler.png
+	echo "50"	; sleep 3
+	rm /usr/share/applications/schedule.desktop	; sleep 3
+	rm -rf /usr/share/Scheduler/
+	echo "#I'm Done, It Was A Nice Run. Do Have A Good Life"
+	echo "100"
+) | yad --progress \
+	--title="Installing" \
+	--pulsate \
+	--width=300 \
+	2>/dev/null

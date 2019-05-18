@@ -1,0 +1,61 @@
+#!/bin/bash
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+[ $(id -u) -eq 0 ] || {
+	yad --center --image dialog-error --title="Error" --text "<span font='12'>Please Run This Installer As SuperUser</span>" --button="gtk-ok" 2>/dev/null
+	exit 0
+}
+declare -i depcount=0
+echo -e "${GREEN} Checking Dependencies"
+mkdir -p /usr/share/Scheduler/
+err(){
+	echo -e "${RED} ERROR: $1" 2>&1
+	echo ""
+}
+for i in /usr/bin/{yad,zenity}
+	do
+		[ -x "$i" ] || {
+			err "Dependency $i Not Met"
+			depcount+=1
+		}
+	done
+
+[ $depcount -eq 0 ] || exit 1
+echo ""
+echo -e "${GREEN} Dependencies Met"
+(
+	echo "#Hold On, This Will Take Just A Second"; sleep 3
+	echo "10"
+	cp ./bin/schedule /usr/bin/
+	echo "#Wait, It's Been A Second Already?" ; sleep 2
+	echo "20"
+	chmod +x /usr/bin/schedule
+	echo "#Okay, Hold On Another Second" ; sleep 3
+	echo "30"
+	cp ./bin/icons/48x48/scheduler.png /usr/share/pixmaps/	
+	echo "#This Is The Second Time I'm Asking For A Second" ; sleep 3
+	echo "40"	
+#	cp ./bin/icons/schedule.png ${HOME}/.icons/
+	echo "#Now, This Is The Second Where I Ask For Another Second" ; sleep 3
+	echo "50"
+	cp ./bin/schedule.desktop /usr/share/applications
+	echo "#Can I Please Be Spared Another Second From Your Time?" ; sleep 3
+	echo "60"
+	chmod +x /usr/share/applications/schedule.desktop ; sleep 2
+	cp ./bin/uninstaller /usr/share/Scheduler/
+	chmod +x /usr/share/Scheduler/uninstaller
+	echo "#I Swear This Is The Last Time I'll Ask For An...... Oh, I'm Done"
+	echo "100"
+) | yad --progress \
+	--center \
+	--title="Installing" \
+	--pulsate \
+	--width=300 \
+	2>/dev/null
+
+	[ $? -eq 0 ] || {
+		yad --center --image dialog-error --title "User Abort" --text="<span font='10'>You Couldn't Just Give All The Seconds I Needed</span>\n\nInstallation Aborted" --width=300 2>/dev/null
+		exit 0
+	}
+
+yad --center --text "<span font='12'>Installation Finished</span>\n\nYou Can Launch Schedule From Your App Drawer"

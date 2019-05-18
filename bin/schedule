@@ -2,9 +2,6 @@
 x=()
 icon_trigger=0
 config=~/.schedule/schedule.conf
-#export -f $config
-#nl=`< $config wc -l`
-#m scared ill fail this course
 arg=$1
 if ! [ -f "$config" ]; then
 	touch $config
@@ -83,7 +80,8 @@ if [ "$icon_trigger" == "0" ]; then
 fi
 	exit 0
 fi
-tr=`zenity --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=650 --height=600 2>/dev/null`
+tr=`yad --center --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=700 --no-selection --height=600 2>/dev/null`
+[ $? -eq 0 ] || list_todo
 r_index=0
 	IFS="|"; for i in $tr; do				
 		if [ $i != 1 ] && [ $y != 0 ]; then
@@ -132,5 +130,6 @@ if [ "$arg" == "--list" -o "$arg" == "-l" -o "$arg" == "" ]; then
 	list_todo
 elif [ "$arg" == "--remove" -o "$arg" == "-r" ]; then
 	remove_todo
-	
+elif [ "$arg" == "--uninstall" -o "$arg" == "-u" ]; then
+	exec /usr/share/uninstaller && exit 0
 fi
