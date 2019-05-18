@@ -34,8 +34,7 @@ echo -e "${GREEN} Dependencies Met"
 	echo "30"
 	cp ./bin/icons/48x48/scheduler.png /usr/share/pixmaps/	
 	echo "#This Is The Second Time I'm Asking For A Second" ; sleep 3
-	echo "40"	
-#	cp ./bin/icons/schedule.png ${HOME}/.icons/
+	echo "40"
 	echo "#Now, This Is The Second Where I Ask For Another Second" ; sleep 3
 	echo "50"
 	cp ./bin/schedule.desktop /usr/share/applications
