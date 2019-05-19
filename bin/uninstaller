@@ -1,28 +1,42 @@
-#!/bin/bash
-
-[ $(id -u) -eq 0 ] || {
-	zenity --error --title="Error" --text "<span font='12'>Please Run This Uninstaller As SuperUser</span>" --width=300 2>/dev/null
-	exit 0
-}
-
+#!/bin/bash -x
 zenity --question --title="We'll Miss You" --text "Hey Buddy, I Really Don't Wanna Leave Here....Your Hard Disk Is So Comfy, I Even Had A Whole Folder To Myself. Please Don't Send Me Packing. I Promise I'll Pay Rent\n\nAre You Sure You Want To Continue With Uninstall?" --width=800 2>/dev/null
 
 [ $? -eq 0 ] || {
 	zenity --info --title="Thanks" --text="Thanks Very Much Man, I'm So Happy.\nTime To Go Get Comfortable Under Some Memory Addresses" --width=300 2>/dev/null
 	exit 0
 }
+pass="$( zenity --password 2>/dev/null )"
+if [[ ${?} != 0 || -z ${pass} ]]
+then
+    zenity --error --text="No password entered" 2>/dev/null
+    exit 4
+fi
 
+if ! sudo -kSp '' [ 1 ] <<<"${pass}" 2>/dev/null
+then
+    zenity --error --text="Incorrect password" 2>/dev/null
+    exit 4
+fi
+declare -i depcount=0
+echo -e "${GREEN} Checking Dependencies"
+err(){
+	echo -e "${RED} ERROR: $1" 2>&1
+	echo ""
+}
+operation(){
+	sudo -Sp '' $1 <<<"${pass}"
+}
 (
 	echo "#Please Wait While I Pack My Load And Move Out"; sleep 3
 	echo "20" ; sleep 3
-	rm /usr/bin/schedule	
+	operation "rm /usr/bin/schedule"
 	echo "30" ; sleep 3
-	rm /usr/share/pixmaps/scheduler.png
+	operation "rm /usr/share/pixmaps/scheduler.png"
 	echo "40" ; sleep 3
 	echo "50"	; sleep 3
-	rm /usr/share/applications/schedule.desktop	; sleep 3
-	rm -rf /usr/share/Scheduler/
-	rm -rf $x
+	operation "rm /usr/share/applications/schedule.desktop"	; sleep 3
+	operation "rm -rf /usr/share/Scheduler/"
+	rm -rf ~/.schedule/
 	echo "#I'm Done, It Was A Nice Run. Do Have A Good Life"
 	echo "100"
 ) | yad --progress \
