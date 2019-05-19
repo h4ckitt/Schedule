@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 zenity --info --text="<span font='12'>This Software Comes With <b>Absolutely No Warranty</b> 🚫\n\nIn The Very Unlikely Case That You Make A Million Bucks Off This Software 💰, Congratulations 🎊, Consider Buying Grams Of Cocaine And Weed 🌿</span>\n\n\n\t\Made With ❤ By Dharmy️" --title="Disclaimer" --width=400 2>/dev/null
@@ -17,7 +17,6 @@ then
 fi
 declare -i depcount=0
 echo -e "${GREEN} Checking Dependencies"
-mkdir -p /usr/share/Scheduler/
 err(){
 	echo -e "${RED} ERROR: $1" 2>&1
 	echo ""
@@ -37,6 +36,7 @@ echo -e "${GREEN} Dependencies Met"
 operation(){
 	sudo -Sp '' $1 <<<"${pass}"
 }
+operation "mkdir -p /usr/share/Scheduler/"
 (
 	echo "#Hold On, This Will Take Just A Second"; sleep 3
 	echo "10"	
@@ -71,4 +71,4 @@ operation(){
 		exit 0
 	}
 
-yad --center --text "<span font='12'>Installation Finished</span>\n\nYou Can Launch Schedule From Your App Drawer" --button="gtk-ok"
+yad --center --text "<span font='12'>Installation Finished</span>\n\nYou Can Launch Schedule From Your App Drawer" --button="gtk-ok" 2>/dev/null
