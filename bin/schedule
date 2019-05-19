@@ -33,7 +33,7 @@ list_todo(){
 		#x+=($z)
 	done < "$config"
 		if [ "$ln" == "1" ]; then
-	yad --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
+	yad --center --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
 	ch=$?
 	if [ "$ch" == "1" ]; then
 		add_todo
@@ -72,7 +72,7 @@ remove_todo(){
 		done
 	done < "$config"
 		if [ "$ln" == "1" ]; then
-	yad --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
+	yad --center --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
 	ch=$?
 	if [ "$ch" == "1" ]; then
 		add_todo

@@ -25,7 +25,8 @@ zenity --question --title="We'll Miss You" --text "Hey Buddy, I Really Don't Wan
 	echo "#I'm Done, It Was A Nice Run. Do Have A Good Life"
 	echo "100"
 ) | yad --progress \
+	--center \
 	--title="Installing" \
 	--pulsate \
-	--width=300 \
+	--width=500 \
 	2>/dev/null
