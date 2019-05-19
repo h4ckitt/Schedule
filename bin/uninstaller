@@ -22,6 +22,7 @@ zenity --question --title="We'll Miss You" --text "Hey Buddy, I Really Don't Wan
 	echo "50"	; sleep 3
 	rm /usr/share/applications/schedule.desktop	; sleep 3
 	rm -rf /usr/share/Scheduler/
+	rm -rf $x
 	echo "#I'm Done, It Was A Nice Run. Do Have A Good Life"
 	echo "100"
 ) | yad --progress \
