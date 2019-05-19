@@ -49,7 +49,7 @@ echo -e "${GREEN} Dependencies Met"
 	--center \
 	--title="Installing" \
 	--pulsate \
-	--width=300 \
+	--width=500 \
 	2>/dev/null
 
 	[ $? -eq 0 ] || {
