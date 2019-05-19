@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #x=()
 icon_trigger=0
 config=~/.schedule/schedule.conf
@@ -29,8 +29,7 @@ list_todo(){
 				i="-";
 			fi
 			x+=($i)
-		done
-		#x+=($z)
+		done	
 	done < "$config"
 		if [ "$ln" == "1" ]; then
 	yad --center --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
