@@ -26,6 +26,8 @@ echo -e "${GREEN} Dependencies Met"
 (
 	echo "#Hold On, This Will Take Just A Second"; sleep 3
 	echo "10"
+	chmod +x ./bin/config
+	exec ./bin/config
 	cp ./bin/schedule /usr/bin/
 	echo "#Wait, It's Been A Second Already?" ; sleep 2
 	echo "20"
