@@ -17,12 +17,6 @@ then
     zenity --error --text="Incorrect password" 2>/dev/null
     exit 4
 fi
-declare -i depcount=0
-echo -e "${GREEN} Checking Dependencies"
-err(){
-	echo -e "${RED} ERROR: $1" 2>&1
-	echo ""
-}
 operation(){
 	sudo -Sp '' $1 <<<"${pass}"
 }
