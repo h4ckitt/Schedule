@@ -1,5 +1,5 @@
 #!/bin/bash -x
-x=()
+#x=()
 icon_trigger=0
 config=~/.schedule/schedule.conf
 arg=$1
@@ -8,8 +8,10 @@ if ! [ -f "$config" ]; then
 fi
 
 add_todo(){
-	zenity --forms --title="Wassup" --add-entry="Course Title" --add-entry="Course Code" --add-entry="Units" --add-calendar="Date" --forms-date-format='%A %d %Y' 1>>"$config" --width=400 2>/dev/null
-
+	z=$((($RANDOM%5000)+1))
+	x=`zenity --forms --title="Wassup" --add-entry="Course Title" --add-entry="Course Code" --add-entry="Units" --add-calendar="Date" --forms-date-format='%A %d %Y' --width=400 2>/dev/null`
+	x=`sed 's/.*/&|'$z'/g' <<<$x`
+	echo "$x" >> "$config"
 if [ "$icon_trigger" == "0" ]; then
 	list_todo
 fi
@@ -19,7 +21,7 @@ fi
 list_todo(){
 	x=()
 	ln=1
-	while read -r todo || [[ -n "$todo" ]]; do
+	while read -r todo || [[ -n "$todo" ]]; do		
 		x+=($ln)
 		ln=$((ln+1))
 		IFS="|"; for i in $todo; do
@@ -28,6 +30,7 @@ list_todo(){
 			fi
 			x+=($i)
 		done
+		#x+=($z)
 	done < "$config"
 		if [ "$ln" == "1" ]; then
 	yad --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
@@ -37,7 +40,7 @@ list_todo(){
 	fi
 	exit 0
 fi
-	yad --list --center --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=600 --height=600 --no-selection --button="Remove:2" --button="Add:1" --button="Ok:0" >/dev/null 2>&1
+	yad --list --center --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]} --width=600 --height=600 --no-selection --button="Remove:2" --button="Add:1" --button="Ok:0" --hide-column=6 >/dev/null 2>&1
 	ch=$?
 		if [ $ch -eq 1 ]; then
 			add_todo
@@ -76,17 +79,13 @@ remove_todo(){
 	fi
 	exit 0
 fi
-tr=`yad --center --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" ${x[*]} --width=700 --print-column=2 --no-selection --height=600 2>/dev/null | tr '\n' '|' | sed 's/|//'`
+tr=`yad --center --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]} --width=700 --print-column=7 --no-selection --height=600 2>/dev/null | tr '\n' '|' | sed 's/|//'`
 [ $? -eq 0 ] || list_todo
 r_index=0
 	IFS='|'; for i in $tr; do
 	[ "$i" != "" ] || continue				
-		if [ $i != 1 ] && [ $y != 0 ]; then
-			i=$(($i-1))
-		fi
-		#j=`sed 's/|.*//' <<<$i`
+		i=`grep -n $i $config | sed 's/:.*//'`				
 		sed -i ''$i'd' $config
-		y=$(($y+1))		
 	done	
 	if [ "$icon_trigger" == "0" ]; then
 	list_todo
