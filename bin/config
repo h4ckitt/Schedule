@@ -1,0 +1,3 @@
+#!/bin/bash
+config=~/.schedule/
+[ -d "$config" ] || mkdir "$config"
