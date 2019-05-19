@@ -30,6 +30,13 @@ In Any Case It Gives Permission Denied When You Try To Run The Installer, Make I
 chmod +x installer
 ```
 
+## Uninstalling
+
+Open Terminal And Run
+```
+schedule -u
+```
+
 ## License
 
 This project is licensed under the GNU General Public License - see the [LICENSE](LICENSE) file for details
