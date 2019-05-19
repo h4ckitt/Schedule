@@ -12,7 +12,7 @@ Yad
 ```
 sudo apt install yad
 ```
-Zenity (Should Come By Default)
+Zenity (Should Be Pre-Installed)
 ```
 sudo apt install zenity
 ```
