@@ -79,9 +79,8 @@ remove_todo(){
 	fi
 	exit 0
 fi
-tr=`yad --center --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]} --width=700 --print-column=7 --no-selection --height=600 2>/dev/null | tr '\n' '|' | sed 's/|//'`
+tr=`yad --center --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]} --width=700 --print-column=7 --hide-column=7 --no-selection --height=600 2>/dev/null | tr '\n' '|' | sed 's/|//'`
 [ $? -eq 0 ] || list_todo
-r_index=0
 	IFS='|'; for i in $tr; do
 	[ "$i" != "" ] || continue				
 		i=`grep -n $i $config | sed 's/:.*//'`				
