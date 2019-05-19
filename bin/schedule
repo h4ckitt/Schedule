@@ -125,6 +125,8 @@ if [ "$arg" == "--list" -o "$arg" == "-l" -o "$arg" == "" ]; then
 elif [ "$arg" == "--remove" -o "$arg" == "-r" ]; then
 	remove_todo
 elif [ "$arg" == "--uninstall" -o "$arg" == "-u" ]; then
+	x=~/.schedule/
+	export $x
 	exec /usr/share/Scheduler/uninstaller 
 	exit 0
 fi
