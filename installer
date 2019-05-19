@@ -1,10 +1,20 @@
 #!/bin/bash
 GREEN='\033[0;32m'
 RED='\033[0;31m'
-[ $(id -u) -eq 0 ] || {
-	yad --center --image dialog-error --title="Error" --text "<span font='12'>Please Run This Installer As SuperUser</span>" --button="gtk-ok" 2>/dev/null
-	exit 0
-}
+zenity --info --text="<span font='12'>This Software Comes With <b>Absolutely No Warranty</b> 🚫\n\nIn The Very Unlikely Case That You Make A Million Bucks Off This Software 💰, Congratulations 🎊, Consider Buying Grams Of Cocaine And Weed 🌿</span>\n\n\n\t\Made With ❤ By Dharmy️" --title="Disclaimer" --width=400 2>/dev/null
+zenity --info --text="<span font='12'>Your Password Will Be Needed To Perform Some Core Installation Functions. Please Be Aware That Your Password Is In <b>No Way Being Stored Or Cached</b> Anywhere\n\nIn Any Case You Do Not Trust This Program, Press Cancel On The Next Dialog To Abort Installation</span>" --title="Password Disclaimer" --width=400 2>/dev/null
+pass="$( zenity --password 2>/dev/null )"
+if [[ ${?} != 0 || -z ${pass} ]]
+then
+    zenity --error --text="No password entered" 2>/dev/null
+    exit 4
+fi
+
+if ! sudo -kSp '' [ 1 ] <<<"${pass}" 2>/dev/null
+then
+    zenity --error --text="Incorrect password" 2>/dev/null
+    exit 4
+fi
 declare -i depcount=0
 echo -e "${GREEN} Checking Dependencies"
 mkdir -p /usr/share/Scheduler/
@@ -23,28 +33,30 @@ for i in /usr/bin/{yad,zenity}
 [ $depcount -eq 0 ] || exit 1
 echo ""
 echo -e "${GREEN} Dependencies Met"
+[ -d ~/.schedule/ ] || mkdir ~/.schedule
+operation(){
+	sudo -Sp '' $1 <<<"${pass}"
+}
 (
 	echo "#Hold On, This Will Take Just A Second"; sleep 3
-	echo "10"
-	chmod +x ./bin/config
-	exec ./bin/config
-	cp ./bin/schedule /usr/bin/
+	echo "10"	
+	operation cp ./bin/schedule /usr/bin/ <<<"${pass}"
 	echo "#Wait, It's Been A Second Already?" ; sleep 2
 	echo "20"
-	chmod +x /usr/bin/schedule
+	operation chmod +x /usr/bin/schedule <<<"${pass}"
 	echo "#Okay, Hold On Another Second" ; sleep 3
 	echo "30"
-	cp ./bin/icons/48x48/scheduler.png /usr/share/pixmaps/	
+	operation cp ./bin/icons/48x48/scheduler.png /usr/share/pixmaps/ <<<"${pass}"
 	echo "#This Is The Second Time I'm Asking For A Second" ; sleep 3
 	echo "40"
 	echo "#Now, This Is The Second Where I Ask For Another Second" ; sleep 3
 	echo "50"
-	cp ./bin/schedule.desktop /usr/share/applications
+	operation cp ./bin/schedule.desktop /usr/share/applications <<<"${pass}"
 	echo "#Can I Please Be Spared Another Second From Your Time?" ; sleep 3
 	echo "60"
-	chmod +x /usr/share/applications/schedule.desktop ; sleep 2
-	cp ./bin/uninstaller /usr/share/Scheduler/
-	chmod +x /usr/share/Scheduler/uninstaller
+	operation chmod +x /usr/share/applications/schedule.desktop ; sleep 2 <<<"${pass}"
+	operation cp ./bin/uninstaller /usr/share/Scheduler/ <<<"${pass}"
+	operation chmod +x /usr/share/Scheduler/uninstaller
 	echo "#I Swear This Is The Last Time I'll Ask For An...... Oh, I'm Done"
 	echo "100"
 ) | yad --progress \
@@ -59,4 +71,4 @@ echo -e "${GREEN} Dependencies Met"
 		exit 0
 	}
 
-yad --center --text "<span font='12'>Installation Finished</span>\n\nYou Can Launch Schedule From Your App Drawer"
+yad --center --text "<span font='12'>Installation Finished</span>\n\nYou Can Launch Schedule From Your App Drawer" --button="gtk-ok"
