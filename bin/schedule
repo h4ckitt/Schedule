@@ -1,5 +1,4 @@
 #!/bin/bash
-#x=()
 icon_trigger=0
 config=~/.schedule/schedule.conf
 arg=$1
@@ -124,9 +123,7 @@ if [ "$arg" == "--list" -o "$arg" == "-l" -o "$arg" == "" ]; then
 	list_todo
 elif [ "$arg" == "--remove" -o "$arg" == "-r" ]; then
 	remove_todo
-elif [ "$arg" == "--uninstall" -o "$arg" == "-u" ]; then
-	x=~/.schedule/
-	export $x
+elif [ "$arg" == "--uninstall" -o "$arg" == "-u" ]; then	
 	exec /usr/share/Scheduler/uninstaller 
 	exit 0
 fi
