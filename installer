@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 zenity --info --text="<span font='12'>This Software Comes With <b>Absolutely No Warranty</b> 🚫\n\nIn The Very Unlikely Case That You Make A Million Bucks Off This Software 💰, Congratulations 🎊, Consider Buying Grams Of Cocaine And Weed 🌿</span>\n\n\n\t\Made With ❤ By Dharmy️" --title="Disclaimer" --width=400 2>/dev/null
@@ -40,23 +40,23 @@ operation(){
 (
 	echo "#Hold On, This Will Take Just A Second"; sleep 3
 	echo "10"	
-	operation cp ./bin/schedule /usr/bin/ <<<"${pass}"
+	operation "cp ./bin/schedule /usr/bin/"
 	echo "#Wait, It's Been A Second Already?" ; sleep 2
 	echo "20"
-	operation chmod +x /usr/bin/schedule <<<"${pass}"
+	operation "chmod +x /usr/bin/schedule"
 	echo "#Okay, Hold On Another Second" ; sleep 3
 	echo "30"
-	operation cp ./bin/icons/48x48/scheduler.png /usr/share/pixmaps/ <<<"${pass}"
+	operation "cp ./bin/icons/48x48/scheduler.png /usr/share/pixmaps/"
 	echo "#This Is The Second Time I'm Asking For A Second" ; sleep 3
 	echo "40"
 	echo "#Now, This Is The Second Where I Ask For Another Second" ; sleep 3
 	echo "50"
-	operation cp ./bin/schedule.desktop /usr/share/applications <<<"${pass}"
+	operation "cp ./bin/schedule.desktop /usr/share/applications"
 	echo "#Can I Please Be Spared Another Second From Your Time?" ; sleep 3
 	echo "60"
-	operation chmod +x /usr/share/applications/schedule.desktop ; sleep 2 <<<"${pass}"
-	operation cp ./bin/uninstaller /usr/share/Scheduler/ <<<"${pass}"
-	operation chmod +x /usr/share/Scheduler/uninstaller
+	operation "chmod +x /usr/share/applications/schedule.desktop" ; sleep 2
+	operation "cp ./bin/uninstaller /usr/share/Scheduler/" 
+	operation "chmod +x /usr/share/Scheduler/uninstaller"
 	echo "#I Swear This Is The Last Time I'll Ask For An...... Oh, I'm Done"
 	echo "100"
 ) | yad --progress \
