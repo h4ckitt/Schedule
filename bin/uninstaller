@@ -35,7 +35,7 @@ operation(){
 	echo "100"
 ) | yad --progress \
 	--center \
-	--title="Installing" \
+	--title="Uninstalling" \
 	--pulsate \
 	--width=500 \
 	2>/dev/null
