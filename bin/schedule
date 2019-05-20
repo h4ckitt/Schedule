@@ -9,9 +9,12 @@ fi
 add_todo(){
 	z=$((($RANDOM%5000)+1))
 	x=`zenity --forms --title="Wassup" --add-entry="Course Title" --add-entry="Course Code" --add-entry="Units" --add-calendar="Date" --forms-date-format='%A %d %Y' --width=400 2>/dev/null`
-	[ $? -eq 0 ] || list_todo
+	if [ $? -eq 0 ] ; then
 	x=`sed 's/.*/&|'$z'/g' <<<$x`
 	echo "$x" >> "$config"
+else
+	list_todo
+fi
 if [ "$icon_trigger" == "0" ]; then
 	list_todo
 fi
