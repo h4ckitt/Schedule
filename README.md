@@ -4,7 +4,7 @@ A Schedule App Built For Students To Keep Track Of Tests Or Exams
 ## Getting Started
 Clone The Repository With
 ```
-git clone https://github.com/yoruba-codigy/ToDo.git
+git clone https://github.com/yoruba-codigy/Schedule.git
 ```
 
 ### Prerequisites
