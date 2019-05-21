@@ -88,9 +88,7 @@ tr=`yad --center --list --checklist --title="TO-DO" --text="Choose Which To Remo
 		i=`grep -n $i $config | sed 's/:.*//'`				
 		sed -i ''$i'd' $config
 	done	
-	if [ "$icon_trigger" == "0" ]; then
 	list_todo
-fi
 }
 export -f remove_todo
 
@@ -115,7 +113,7 @@ icon_tray(){
 	export -f on_click
 
 	menu_options(){
-		echo "icon:schedule"
+		echo "icon:scheduler"
 		echo "menu:Add Todo!bash -c explicit_add!gtk-add||List Todo!bash -c on_click!gtk-yes||Remove Todo!bash -c explicit_remove!gtk-remove||Quit!quit!gtk-quit"
 		echo "tooltip:Schedule"
 	}
