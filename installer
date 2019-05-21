@@ -48,7 +48,7 @@ operation "mkdir -p /usr/share/Scheduler/"
 	operation "chmod +x /usr/bin/schedule"
 	echo "#Okay, Hold On Another Second" ; sleep 3
 	echo "30"
-	operation "cp ./bin/icons/48x48/scheduler.png /usr/share/pixmaps/"
+	cp ./bin/icons/48x48/scheduler.png ~/.local/share/icons/
 	echo "#This Is The Second Time I'm Asking For A Second" ; sleep 3
 	echo "40"
 	echo "#Now, This Is The Second Where I Ask For Another Second" ; sleep 3
