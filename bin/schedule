@@ -8,9 +8,10 @@ fi
 
 add_todo(){
 	z=$((($RANDOM%5000)+1))
-	x=`zenity --forms --title="Wassup" --add-entry="Course Title" --add-entry="Course Code" --add-entry="Units" --add-calendar="Date" --forms-date-format='%A %d %Y' --width=400 2>/dev/null`
+	#x=`zenity --forms --title="Wassup" --add-entry="Course Title" --add-entry="Course Code" --add-entry="Units" --add-calendar="Date" --forms-date-format='%A %d %Y' --width=400 2>/dev/null`
+	x=`yad --form --title="Wassup" --field="Course Title" --field="Course Code" --field="Units" --field="Date:DT" "" "" "" "Click The Date Icon" --date-format='%A %d %Y' --width=400 2>/dev/null`	
 	if [ $? -eq 0 ] ; then
-	x=`sed 's/.*/&|'$z'/g' <<<$x`
+	x=`sed 's/.*/&'$z'/g' <<<$x`
 	echo "$x" >> "$config"
 else
 	list_todo
@@ -28,7 +29,7 @@ list_todo(){
 		x+=($ln)
 		ln=$((ln+1))
 		IFS="|"; for i in $todo; do
-			if [ "$i" == "" ]; then
+			if [ "$i" == "" ]||[ "$i" == "Click The Date Icon" ]; then
 				i="-";
 			fi
 			x+=($i)
@@ -42,7 +43,7 @@ list_todo(){
 	fi
 	exit 0
 fi
-	yad --list --center --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]} --width=600 --height=600 --no-selection --button="Remove:2" --button="Add:1" --button="Ok:0" --hide-column=6 >/dev/null 2>&1
+	yad --list --center --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]}  --hide-column=6 --width=600 --height=600 --no-selection --button="Remove:2" --button="Add:1" --button="Ok:0" >/dev/null 2>&1
 	ch=$?
 		if [ $ch -eq 1 ]; then
 			add_todo
@@ -50,7 +51,7 @@ fi
 			remove_todo
 		else			
 			if [ "$icon_trigger" == "0" ]; then
-				icon_trigger=$(($icon_trigger+1))
+				icon_trigger=1
 			yad --image dialog-alert --center --title="Tray Notif" --text="The Schedule App Will Continue In The App Tray" --button="gtk-ok" --width=380 2>/dev/null
 			icon_tray
 		fi
@@ -67,7 +68,7 @@ remove_todo(){
 		x+=($ln)
 		ln=$((ln+1))
 		IFS="|"; for i in $todo; do
-			if [ "$i" == "" ]; then
+			if [ "$i" == "" ]||[ "$1" == "Click The Date Icon" ]; then
 				i="-";
 			fi			
 			x+=($i)			
