@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 icon_trigger=0
 config=~/.schedule/schedule.conf
 arg=$1
@@ -7,12 +7,20 @@ if ! [ -f "$config" ]; then
 fi
 
 add_todo(){
-	z=$((($RANDOM%5000)+1))
-	#x=`zenity --forms --title="Wassup" --add-entry="Course Title" --add-entry="Course Code" --add-entry="Units" --add-calendar="Date" --forms-date-format='%A %d %Y' --width=400 2>/dev/null`
-	x=`yad --form --title="Wassup" --field="Course Title" --field="Course Code" --field="Units" --field="Date:DT" "" "" "" "Click The Date Icon" --date-format='%A %d %Y' --width=400 2>/dev/null`	
-	if [ $? -eq 0 ] ; then
+	z=$((($RANDOM%5000)+1))	
+	x=`yad --center --form --title="Add Dialog" --field="Course Title" --field="Course Code" --field="Units" --field="Date:DT" "" "" "" "Click The Date Icon" --date-format='%A %d %Y' --button="gtk-cancel:1" --button="Add Another:2" --button="gtk-ok:0"--width=400 2>/dev/null`	
+	r=$?
+	[ $r != 2 ]|| {
+		r=0
+		add=1
+	}
+if [ $r -eq 0 ] ; then
 	x=`sed 's/.*/&'$z'/g' <<<$x`
 	echo "$x" >> "$config"
+	if [ $add -eq 1 ]; then
+		add=0
+		add_todo
+	fi
 else
 	list_todo
 fi
