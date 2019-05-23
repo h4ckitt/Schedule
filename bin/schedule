@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 icon_trigger=0
 config=~/.schedule/schedule.conf
 arg=$1
