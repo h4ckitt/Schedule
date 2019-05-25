@@ -76,7 +76,7 @@ remove_todo(){
 		x+=($ln)
 		ln=$((ln+1))
 		IFS="|"; for i in $todo; do
-			if [ "$i" == "" ]||[ "$1" == "Click The Date Icon" ]; then
+			if [ "$i" == "" ]||[ "$i" == "Click The Date Icon" ]; then
 				i="-";
 			fi			
 			x+=($i)			
