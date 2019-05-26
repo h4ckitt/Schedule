@@ -34,20 +34,20 @@ sanitize_todo(){
 add_todo(){
 	mvisible=0
 	z=$((($RANDOM%5000)+1))	
-	x=`yad --center --form --title="Add Dialog" --field="Course Title" --field="Course Code" --field="Units" --field="Date:DT" "" "" "" "Click The Date Icon" --date-format='%A %d %Y' --button="gtk-cancel:1" --button="Add Another:2" --button="gtk-ok:0"--width=400 2>/dev/null`	
-	r=$?
-	add=0
-	[ $r != 2 ]|| {
-		r=0
-		add=1
-	}
-if [ $r -eq 0 ] ; then
+	x=`yad --center --form --title="Add Dialog" --field="Course Title" --field="Course Code" --field="Units" --field="Date:DT" "" "" "" "Click The Date Icon" --date-format='%A %d %Y' --button="gtk-cancel:1" --button="gtk-ok:0" --width=400 2>/dev/null`	
+	#r=$?
+	#add=0
+	#[ $r != 2 ]|| {
+	#	r=0
+	#	add=1
+	#}
+if [ $? -eq 0 ] ; then
 	x=`sed 's/.*/&'$z'/g' <<<$x`
 	echo "$x" >> "$config"
-	if [ $add -eq 1 ]; then
-		add=0
-		add_todo
-	fi
+	#if [ $add -eq 1 ]; then
+	#	add=0
+	#	add_todo
+	#fi
 fi
 	sanitize_todo
 	list_todo
