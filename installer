@@ -21,7 +21,7 @@ echo ""
 echo -e "${GREEN} Dependencies Met"
 zenity --info --text="<span font='12'>This Software Comes With <b>Absolutely No Warranty</b> 🚫\n\nIn The Very Unlikely Case That You Make A Million Bucks Off This Software 💰, Congratulations 🎊, Consider Buying Grams Of Cocaine And Weed 🌿</span>\n\n\n\t\Made With ❤ By Dharmy️" --title="Disclaimer" --width=400 2>/dev/null
 zenity --info --text="<span font='12'>Your Password Will Be Needed To Perform Some Core Installation Functions. Please Be Aware That Your Password Is In <b>No Way Being Stored Or Cached</b> Anywhere\n\nIn Any Case You Do Not Trust This Program, Press Cancel On The Next Dialog To Abort Installation</span>" --title="Password Disclaimer" --width=400 2>/dev/null
-pass="$( zenity --password 2>/dev/null )"
+pass="$( zenity --password --title="Enter Your Pass" 2>/dev/null )"
 if [[ ${?} != 0 || -z ${pass} ]]
 then
     zenity --error --text="No password entered" 2>/dev/null
@@ -49,6 +49,7 @@ operation "mkdir -p /usr/share/Scheduler/"
 	echo "#Okay, Hold On Another Second" ; sleep 3
 	echo "30"
 	cp ./bin/icons/48x48/scheduler.png ~/.local/share/icons/
+	operation "cp ./bin/icons/48x48/scheduler.png /usr/share/pixmaps/"
 	echo "#This Is The Second Time I'm Asking For A Second" ; sleep 3
 	echo "40"
 	echo "#Now, This Is The Second Where I Ask For Another Second" ; sleep 3
@@ -66,11 +67,12 @@ operation "mkdir -p /usr/share/Scheduler/"
 	--title="Installing" \
 	--pulsate \
 	--width=500 \
+	--auto-close \
 	2>/dev/null
 
 	[ $? -eq 0 ] || {
-		yad --center --image dialog-error --title "User Abort" --text="<span font='10'>You Couldn't Just Give All The Seconds I Needed</span>\n\nInstallation Aborted" --width=300 2>/dev/null
-		exit 0
+		yad --center --image dialog-error --title "User Abort" --text="<span font='10'>You Couldn't Just Give All The Seconds I Needed</span>\n\nInstallation Aborted" --button="gtk-ok" --width=300 2>/dev/null
+		exit 1
 	}
 
-yad --center --text "<span font='12'>Installation Finished</span>\n\nYou Can Launch Schedule From Your App Drawer" --button="gtk-ok" 2>/dev/null
+yad --center --text "<span font='12'>Installation Finished</span>\n\nYou Can Launch Schedule From Your App Drawer" --title="Installation Finished" --button="gtk-ok" 2>/dev/null

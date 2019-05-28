@@ -5,7 +5,7 @@ zenity --question --title="We'll Miss You" --text "Hey Buddy, I Really Don't Wan
 	zenity --info --title="Thanks" --text="Thanks Very Much Man, I'm So Happy.\nTime To Go Get Comfortable Under Some Memory Addresses" --width=300 2>/dev/null
 	exit 0
 }
-pass="$( zenity --password 2>/dev/null )"
+pass="$( zenity --password --title="Enter Your Pass" 2>/dev/null )"
 if [[ ${?} != 0 || -z ${pass} ]]
 then
     zenity --error --text="No password entered" 2>/dev/null
@@ -27,6 +27,7 @@ operation(){
 	echo "30" ; sleep 3
 	operation "rm /usr/share/pixmaps/scheduler.png"
 	echo "40" ; sleep 3
+	rm ~/.local/share/icons/scheduler.png
 	echo "50"	; sleep 3
 	operation "rm /usr/share/applications/schedule.desktop"	; sleep 3
 	operation "rm -rf /usr/share/Scheduler/"

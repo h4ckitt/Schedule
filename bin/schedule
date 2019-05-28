@@ -1,21 +1,20 @@
-#!/bin/bash -x
+#!/bin/bash
 icon_trigger=0
 config=~/.schedule/schedule.conf
 arg=$1
-mvisible=0
 if ! [ -f "$config" ]; then
 	touch $config
 fi
 
-sanitize_todo(){	
+sanitize_todo(){
 	green=1
 	t_line=`wc -l < "$config"`
 	line=0
-	while read -r sanitize || [[ -n "$sanitize" ]]; do		
+	while read -r sanitize || [[ -n "$sanitize" ]]; do
 		line=$((line+1))
 		sentinel=0
 		IFS="|"; for i in $sanitize; do
-			if [ "$i" == "" ] || [ "$i" == "Click The Date Icon" ]; then
+			if [ "$i" == "" ] || [ "$i" == "Click The Date Icon ->" ]; then
 				sentinel=$((sentinel+1))
 			fi
 			[ "$sentinel" != "4" ] || {
@@ -23,32 +22,24 @@ sanitize_todo(){
 				green=0
 				break
 			}
-		done	
+		done
 		if [ $green -eq 0 ]; then
 			sanitize_todo
-		fi	
+		fi
 	done < "$config"
 }
 	export -f sanitize_todo
 
 add_todo(){
-	mvisible=0
-	z=$((($RANDOM%5000)+1))	
-	x=`yad --center --form --title="Add Dialog" --field="Course Title" --field="Course Code" --field="Units" --field="Date:DT" "" "" "" "Click The Date Icon" --date-format='%A %d %Y' --button="gtk-cancel:1" --button="gtk-ok:0" --width=400 2>/dev/null`	
-	#r=$?
-	#add=0
-	#[ $r != 2 ]|| {
-	#	r=0
-	#	add=1
-	#}
-if [ $? -eq 0 ] ; then
+	r=2
+	while [ $r -eq 2 ]; do
+	z=$((($RANDOM%5000)+1))
+	x=`yad --center --form --title="Add Dialog" --field="Course Title" --field="Course Code" --field="Units" --field="Date:DT" "" "" "" "Click The Date Icon ->" --date-format='%A %d %Y' --button="gtk-cancel:1" --button="Add Another!gtk-add:2" --button="gtk-ok:0" --width=400 2>/dev/null`
+	r=$?
+	[ $r -eq 2 -o $r -eq 0 ] || break
 	x=`sed 's/.*/&'$z'/g' <<<$x`
 	echo "$x" >> "$config"
-	#if [ $add -eq 1 ]; then
-	#	add=0
-	#	add_todo
-	#fi
-fi
+done
 	sanitize_todo
 	list_todo
 }
@@ -57,15 +48,15 @@ fi
 list_todo(){
 	x=()
 	ln=1
-	while read -r todo || [[ -n "$todo" ]]; do		
+	while read -r todo || [[ -n "$todo" ]]; do
 		x+=($ln)
 		ln=$((ln+1))
 		IFS="|"; for i in $todo; do
-			if [ "$i" == "" ]||[ "$i" == "Click The Date Icon" ]; then
+			if [ "$i" == "" ]||[ "$i" == "Click The Date Icon ->" ]; then
 				i="-";
 			fi
 			x+=($i)
-		done	
+		done
 	done < "$config"
 		if [ "$ln" == "1" ]; then
 	yad --center --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
@@ -81,9 +72,8 @@ fi
 			add_todo
 		elif [ $ch -eq 2 ]; then
 			remove_todo
-		else			
+		else
 			if [ "$icon_trigger" == "0" ]; then
-				mvisible=1
 				icon_trigger=1
 			yad --image dialog-alert --center --title="Tray Notif" --text="The Schedule App Will Continue In The App Tray" --button="gtk-ok" --width=380 2>/dev/null
 			icon_tray
@@ -96,15 +86,15 @@ remove_todo(){
 	x=()
 	y=0
 	ln=1
-	while read -r todo || [[ -n "$todo" ]]; do		
-		x+=(false)		
+	while read -r todo || [[ -n "$todo" ]]; do
+		x+=(false)
 		x+=($ln)
 		ln=$((ln+1))
 		IFS="|"; for i in $todo; do
-			if [ "$i" == "" ]||[ "$i" == "Click The Date Icon" ]; then
+			if [ "$i" == "" ]||[ "$i" == "Click The Date Icon ->" ]; then
 				i="-";
-			fi			
-			x+=($i)			
+			fi
+			x+=($i)
 		done
 	done < "$config"
 		if [ "$ln" == "1" ]; then
@@ -118,10 +108,10 @@ fi
 tr=`yad --center --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]} --width=700 --print-column=7 --hide-column=7 --no-selection --height=600 2>/dev/null | tr '\n' '|' | sed 's/|//'`
 [ $? -eq 0 ] || list_todo
 	IFS='|'; for i in $tr; do
-	[ "$i" != "" ] || continue				
-		i=`grep -n $i $config | sed 's/:.*//'`				
+	[ "$i" != "" ] || continue
+		i=`grep -n $i $config | sed 's/:.*//'`
 		sed -i ''$i'd' $config
-	done	
+	done
 	list_todo
 }
 export -f remove_todo
@@ -129,17 +119,20 @@ export -f remove_todo
 icon_tray(){
 	export fifo=$(mktemp -u --tmpdir schedule.XXXXXXXX)
 	mkfifo "$fifo"
-	trap "rm -f $fifo" exit		
+	trap "rm -f $fifo" exit
+
 	explicit_remove(){
 		config=~/.schedule/schedule.conf
 		remove_todo
 	}
 	export -f explicit_remove
+
 	explicit_add(){
 		config=~/.schedule/schedule.conf
 		add_todo
 	}
 	export -f explicit_add
+
 	on_click(){
 		config=~/.schedule/schedule.conf
 		list_todo
@@ -159,7 +152,7 @@ if [ "$arg" == "--list" -o "$arg" == "-l" -o "$arg" == "" ]; then
 	list_todo
 elif [ "$arg" == "--remove" -o "$arg" == "-r" ]; then
 	remove_todo
-elif [ "$arg" == "--uninstall" -o "$arg" == "-u" ]; then	
-	exec /usr/share/Scheduler/uninstaller 
+elif [ "$arg" == "--uninstall" -o "$arg" == "-u" ]; then
+	exec /usr/share/Scheduler/uninstaller
 	exit 0
 fi
