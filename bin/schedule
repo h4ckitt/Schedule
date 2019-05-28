@@ -14,7 +14,7 @@ sanitize_todo(){
 		line=$((line+1))
 		sentinel=0
 		IFS="|"; for i in $sanitize; do
-			if [ "$i" == "" ] || [ "$i" == "Click The Date Icon ->" ]; then
+			if [ "$i" == "" ] || [ "$i" == "Click That Icon Over There ->" ]; then
 				sentinel=$((sentinel+1))
 			fi
 			[ "$sentinel" != "4" ] || {
@@ -34,7 +34,7 @@ add_todo(){
 	r=2
 	while [ $r -eq 2 ]; do
 	z=$((($RANDOM%5000)+1))
-	x=`yad --center --form --title="Add Dialog" --field="Course Title" --field="Course Code" --field="Units" --field="Date:DT" "" "" "" "Click The Date Icon ->" --date-format='%A %d %Y' --button="gtk-cancel:1" --button="Add Another!gtk-add:2" --button="gtk-ok:0" --width=400 2>/dev/null`
+	x=`yad --center --form --title="Add Dialog" --field="Course Title" --field="Course Code" --field="Units" --field="Date:DT" "" "" "" "Click That Icon Over There ->" --date-format='%A %d %Y' --button="gtk-cancel:1" --button="Add Another!gtk-add:2" --button="gtk-ok:0" --width=400 2>/dev/null`
 	r=$?
 	[ $r -eq 2 -o $r -eq 0 ] || break
 	x=`sed 's/.*/&'$z'/g' <<<$x`
@@ -52,7 +52,7 @@ list_todo(){
 		x+=($ln)
 		ln=$((ln+1))
 		IFS="|"; for i in $todo; do
-			if [ "$i" == "" ]||[ "$i" == "Click The Date Icon ->" ]; then
+			if [ "$i" == "" ]||[ "$i" == "Click That Icon Over There ->" ]; then
 				i="-";
 			fi
 			x+=($i)
@@ -91,7 +91,7 @@ remove_todo(){
 		x+=($ln)
 		ln=$((ln+1))
 		IFS="|"; for i in $todo; do
-			if [ "$i" == "" ]||[ "$i" == "Click The Date Icon ->" ]; then
+			if [ "$i" == "" ]||[ "$i" == "Click That Icon Over There ->" ]; then
 				i="-";
 			fi
 			x+=($i)
