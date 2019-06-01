@@ -1,4 +1,11 @@
-#!/bin/bash
+#!/bin/bash -x
+if ! [ -f ~/.schedule/schcurrpid ]; then
+	echo $BASHPID > ~/.schedule/schcurrpid
+else
+	read peed < ~/.schedule/schcurrpid
+	zenity --error --text="<span font='12'>Another Instance Is Currently Running\n\nPID: $peed</span>" --width=400 2>/dev/null
+	exit 1
+fi
 icon_trigger=0
 config=~/.schedule/schedule.conf
 arg=$1
@@ -119,7 +126,15 @@ export -f remove_todo
 icon_tray(){
 	export fifo=$(mktemp -u --tmpdir schedule.XXXXXXXX)
 	mkfifo "$fifo"
+
 	trap "rm -f $fifo" exit
+
+	qweet(){
+		rm ~/.schedule/schcurrpid
+		yd=`ps -ax | grep yad | tr -d '\n' | sed 's/[[:space:]].*//'`
+		kill $yd
+	}
+	export -f qweet
 
 	explicit_remove(){
 		config=~/.schedule/schedule.conf
@@ -133,19 +148,19 @@ icon_tray(){
 	}
 	export -f explicit_add
 
-	on_click(){
+	click_act(){
 		config=~/.schedule/schedule.conf
 		list_todo
 	}
-	export -f on_click
+	export -f click_act
 
 	menu_options(){
 		echo "icon:scheduler"
-		echo "menu:Add Todo!bash -c explicit_add!gtk-add||List Todo!bash -c on_click!gtk-yes||Remove Todo!bash -c explicit_remove!gtk-remove||Quit!quit!gtk-quit"
+		echo "menu:Add Todo!bash -c explicit_add!gtk-add||List Todo!bash -c on_click!gtk-yes||Remove Todo!bash -c explicit_remove!gtk-remove||Quit!bash -c qweet!gtk-quit"
 		echo "tooltip:Schedule"
 	}
 	exec 3<>$fifo
-	yad --notification --command="bash -c on_click" --listen <&3 2>/dev/null & menu_options >&3 2>/dev/null
+	yad --notification --command="bash -c click_act" --listen <&3 2>/dev/null & menu_options >&3 2>/dev/null
 	exec 3>&-
 }
 if [ "$arg" == "--list" -o "$arg" == "-l" -o "$arg" == "" ]; then
