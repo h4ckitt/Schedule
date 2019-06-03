@@ -75,6 +75,7 @@ list_todo(){
 	if [ "$ch" == "1" ]; then
 		add_todo
 	fi
+	rm ~/.schedule/schcurrpid
 	exit 0
 fi
 	yad --list --center --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]}  --hide-column=6 --width=600 --height=600 --no-selection --button="Remove:2" --button="Add:1" --button="Ok:0" >/dev/null 2>&1
@@ -117,6 +118,7 @@ remove_todo(){
 	if [ "$ch" == "1" ]; then
 		add_todo
 	fi
+	rm ~/.schedule/schcurrpid
 	exit 0
 fi
 tr=`yad --center --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]} --width=700 --print-column=7 --hide-column=7 --no-selection --height=600 2>/dev/null | tr '\n' '|' | sed 's/|//'`
