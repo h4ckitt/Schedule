@@ -55,15 +55,19 @@ done
 list_todo(){
 	x=()
 	ln=1
+	declare -i b=0
+	declare -i c=4
 	while read -r todo || [[ -n "$todo" ]]; do
 		x+=($ln)
 		ln=$((ln+1))
 		IFS="|"; for i in $todo; do
-			if [ "$i" == "" ]||[ "$i" == "Click That Icon Over There ->" ]; then
+			b+=1
+			if [ "$i" == "" ]||( [ $b -eq $c ] && [[ ! $i =~ Mon|Tue|Wed|Thu|Fri|Sat|Sun ]]); then
 				i="-";
 			fi
 			x+=($i)
 		done
+		c+=5
 	done < "$config"
 		if [ "$ln" == "1" ]; then
 	yad --center --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
@@ -91,18 +95,21 @@ export -f list_todo
 
 remove_todo(){
 	x=()
-	y=0
 	ln=1
+	declare -i b=0
+	declare -i c=4
 	while read -r todo || [[ -n "$todo" ]]; do
 		x+=(false)
 		x+=($ln)
 		ln=$((ln+1))
 		IFS="|"; for i in $todo; do
-			if [ "$i" == "" ]||[ "$i" == "Click That Icon Over There ->" ]; then
+			b+=1
+			if [ "$i" == "" ]||( [ $b -eq $c ] && [[ ! $i =~ Mon|Tue|Wed|Thu|Fri|Sat|Sun ]]); then
 				i="-";
 			fi
 			x+=($i)
 		done
+		c+=5
 	done < "$config"
 		if [ "$ln" == "1" ]; then
 	yad --center --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
