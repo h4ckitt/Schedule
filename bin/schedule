@@ -140,8 +140,8 @@ icon_tray(){
 
 	qweet(){
 		rm ~/.schedule/schcurrpid
-		yd=`ps -ax | grep yad | tr -d '\n' | sed 's/[[:space:]].*//'`
-		kill $yd
+		kill $(ps -ax | grep yad | tr -d '\n' | sed 's/[[:space:]]//' | sed 's/[[:space:]].*//')
+		
 	}
 	export -f qweet
 
