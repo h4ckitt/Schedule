@@ -165,7 +165,7 @@ icon_tray(){
 
 	menu_options(){
 		echo "icon:scheduler"
-		echo "menu:Add Todo!bash -c explicit_add!gtk-add||List Todo!bash -c on_click!gtk-yes||Remove Todo!bash -c explicit_remove!gtk-remove||Quit!bash -c qweet!gtk-quit"
+		echo "menu:Add Todo!bash -c explicit_add!gtk-add||List Todo!bash -c click_act!gtk-yes||Remove Todo!bash -c explicit_remove!gtk-remove||Quit!bash -c qweet!gtk-quit"
 		echo "tooltip:Schedule"
 	}
 	exec 3<>$fifo
