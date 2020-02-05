@@ -19,7 +19,7 @@ for i in /usr/bin/{yad,zenity}
 [ $depcount -eq 0 ] || exit 1
 echo ""
 echo -e "${GREEN} Dependencies Met"
-zenity --info --text="<span font='12'>This Software Comes With <b>Absolutely No Warranty</b> 🚫\n\nIn The Very Unlikely Case That You Make A Million Bucks Off This Software 💰, Congratulations 🎊, Consider Buying Grams Of Cocaine And Weed 🌿</span>\n\n\n\t\Made With ❤ By Dharmy️" --title="Disclaimer" --width=400 2>/dev/null
+zenity --info --text="<span font='12'>This Software Comes With <b>Absolutely No Warranty</b> 🚫\n\nIn The Very Unlikely Case That You Make A Million Bucks Off This Software 💰, Congratulations 🎊, Consider Buying Grams Of Cocaine And Weed 🌿</span>\n\n\n\t\Made With ❤ For You By Dharmy️" --title="Disclaimer" --width=400 2>/dev/null
 zenity --info --text="<span font='12'>Your Password Will Be Needed To Perform Some Core Installation Functions. Please Be Aware That Your Password Is In <b>No Way Being Stored Or Cached</b> Anywhere\n\nIn Any Case You Do Not Trust This Program, Press Cancel On The Next Dialog To Abort Installation</span>" --title="Password Disclaimer" --width=400 2>/dev/null
 pass="$( zenity --password --title="Enter Your Pass" 2>/dev/null )"
 if [[ ${?} != 0 || -z ${pass} ]]
