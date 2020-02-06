@@ -1,5 +1,5 @@
 # ToDo
-A Schedule App Built For Students To Keep Track Of Tests Or Exams
+A Schedule App Built For Students To Keep Track Of Tests, Assignments Or Exams
 
 ## Getting Started
 Clone The Repository With
