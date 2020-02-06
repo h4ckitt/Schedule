@@ -13,27 +13,26 @@ then
 fi
 
 if ! sudo -kSp '' [ 1 ] <<<"${pass}" 2>/dev/null
-then
+thenewf
     zenity --error --text="Incorrect password" 2>/dev/null
     exit 4
 fi
-operation(){
+execute(){
 	sudo -Sp '' $1 <<<"${pass}"
 }
+
 (
-	echo "#Please Wait While I Pack My Load And Move Out"; sleep 3
-	echo "20" ; sleep 3
-	operation "rm /usr/bin/schedule"
-	echo "30" ; sleep 3
-	operation "rm /usr/share/pixmaps/scheduler.png"
-	echo "40" ; sleep 3
+	echo "#Please Wait While I Pack My Load And Move Out"; sleep 3	
+	execute "rm /usr/bin/schedule"	
+	sleep 3
+	execute "rm /usr/share/pixmaps/scheduler.png"
 	rm ~/.local/share/icons/scheduler.png
-	echo "50"	; sleep 3
-	operation "rm /usr/share/applications/schedule.desktop"	; sleep 3
-	operation "rm -rf /usr/share/Scheduler/"
+	sleep 3
+	execute "rm /usr/share/applications/schedule.desktop"	; sleep 3
+	execute "rm -rf /usr/share/Scheduler/"
+	sleep 3
 	rm -rf ~/.schedule/
-	echo "#I'm Done, It Was A Nice Run. Do Have A Good Life"
-	echo "100"
+	echo "#I'm Done, It Was A Nice Run. Do Have A Good Life"	
 ) | yad --progress \
 	--center \
 	--title="Uninstalling" \
