@@ -41,7 +41,7 @@ add_todo(){
 	r=2
 	while [ $r -eq 2 ]; do
 	z=$((($RANDOM%5000)+1))
-	x=`yad --center --form --title="Add Dialog" --field="Course Title" --field="Course Code" --field="Units" --field="Date:DT" "" "" "" "Click That Icon Over There ->" --date-format='%A %d %Y' --button="gtk-cancel:1" --button="Add Another!gtk-add:2" --button="gtk-ok:0" --width=400 2>/dev/null`
+	x=`yad --center --form --title="Add Dialog" --field="Note" --field="Course Code" --field="Units" --field="Date:DT" "" "" "" "Click That Icon Over There ->" --date-format='%A %d %Y' --button="gtk-cancel:1" --button="Add Another!gtk-add:2" --button="gtk-ok:0" --width=400 2>/dev/null`
 	r=$?
 	[ $r -eq 2 -o $r -eq 0 ] || break
 	x=`sed 's/.*/&'$z'/g' <<<$x`
@@ -78,7 +78,7 @@ list_todo(){
 	rm ~/.schedule/schcurrpid
 	exit 0
 fi
-	yad --list --center --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]}  --hide-column=6 --width=600 --height=600 --no-selection --button="Remove:2" --button="Add:1" --button="Ok:0" >/dev/null 2>&1
+	yad --list --center --title="TO-DO" --text="Here Are Your Stuff To-Do" --column="S/N" --column="Note" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]}  --hide-column=6 --width=600 --height=600 --no-selection --button="Remove:2" --button="Add:1" --button="Ok:0" >/dev/null 2>&1
 	ch=$?
 		if [ $ch -eq 1 ]; then
 			add_todo
@@ -110,7 +110,7 @@ remove_todo(){
 			fi
 			x+=($i)
 		done
-		c+=5
+		c+=5 
 	done < "$config"
 		if [ "$ln" == "1" ]; then
 	yad --center --text="Your To-Do List Is Spick Span\n\nWould You Like To Add A Task?" --title="Empty" --button="Yes:1" --button="No:0" --width=400 2>/dev/null
@@ -121,7 +121,7 @@ remove_todo(){
 	rm ~/.schedule/schcurrpid
 	exit 0
 fi
-tr=`yad --center --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Course Title" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]} --width=700 --print-column=7 --hide-column=7 --no-selection --height=600 2>/dev/null | tr '\n' '|' | sed 's/|//'`
+tr=`yad --center --list --checklist --title="TO-DO" --text="Choose Which To Remove" --column="Selection" --column="S/N" --column="Note" --column="Course Code" --column="Units" --column="Date" --column="ID" ${x[*]} --width=700 --print-column=7 --hide-column=7 --no-selection --height=600 2>/dev/null | tr '\n' '|' | sed 's/|//'`
 [ $? -eq 0 ] || list_todo
 	IFS='|'; for i in $tr; do
 	[ "$i" != "" ] || continue
